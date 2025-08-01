@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ByteSec Underground</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary-color: #FF4444;
+      --secondary-color: #FF6666;
+      --light-color: #FFCCCC;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: url('https://subir-imagen.com/images/2025/07/31/Captura-de-pantalla-2025-07-31-022600.png') no-repeat center center fixed;
+      background-size: cover;
+      color: var(--primary-color);
+      font-family: 'Fira Code', monospace;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: rgba(0, 0, 0, 0.9);
+      border-radius: 12px;
+      box-shadow: 0 0 15px var(--primary-color);
+    }
+
+    h1, h2, h3 {
+      font-weight: normal;
+      margin-top: 0;
+    }
+
+    a {
+      color: var(--secondary-color);
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .terminal {
+      background-color: #0b0b0b;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: inset 0 0 10px #000;
+      font-size: 1rem;
+      line-height: 1.5;
+      min-height: 250px;
+      margin-top: 20px;
+      white-space: pre-line;
+    }
+
+    .ad-banner, .ad-gx {
+      position: fixed;
+      background-color: #1b1b1b;
+      border: 1px solid var(--primary-color);
+      border-radius: 6px;
+      padding: 10px 15px;
+      font-size: 0.9rem;
+      box-shadow: 0 0 10px var(--primary-color);
+      z-index: 9999;
+      color: var(--light-color);
+      max-width: 240px;
+    }
+
+    .ad-banner {
+      bottom: 20px;
+      right: 20px;
+    }
+
+    .ad-gx {
+      bottom: 20px;
+      left: 20px;
+    }
+
+    .ad-banner a, .ad-gx a {
+      color: var(--secondary-color);
+      font-weight: bold;
+    }
+
+    .close-ad {
+      position: absolute;
+      top: 2px;
+      right: 6px;
+      cursor: pointer;
+      color: var(--secondary-color);
+      font-weight: bold;
+    }
+
+    .key-input-container {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .key-input-container input {
+      padding: 6px 10px;
+      background-color: #0A0F0F;
+      color: var(--secondary-color);
+      border: 1px solid var(--primary-color);
+      border-radius: 4px;
+      font-family: 'Fira Code', monospace;
+      margin-right: 5px;
+    }
+
+    .key-input-container button {
+      background-color: #111;
+      border: 1px solid var(--primary-color);
+      color: var(--secondary-color);
+      padding: 6px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .key-input-container button:hover {
+      background-color: #1d1d1d;
+    }
+
+    .color-picker {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: rgba(10, 15, 15, 0.85);
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid var(--primary-color);
+      z-index: 10000;
+    }
+
+    .color-picker h3 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+      color: var(--light-color);
+    }
+
+    .color-picker button {
+      margin: 3px;
+      padding: 5px 10px;
+      border: 1px solid var(--primary-color);
+      background: transparent;
+      color: var(--primary-color);
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .color-picker button:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>ByteSec Underground</h1>
+    <p><em>Ethical hacking | Security research | Profit from skills</em></p>
+    <div id="terminal" class="terminal"></div>
+
+    <div class="key-input-container" id="keyInputSection">
+      <p><strong>🔓 Open Filtr:</strong></p>
+      <input type="password" id="filtrKey" placeholder="Ingresa clave..." />
+      <button onclick="unlockFiltr()">Acceder</button>
+    </div>
+  </div>
+
+  <!-- Publicidad eBay -->
+  <div id="adBanner" class="ad-banner">
+    <span class="close-ad" onclick="document.getElementById('adBanner').style.display='none'">✖</span>
+    🔥 ¿Buscas hardware barato para tu laboratorio?<br>
+    <a href="https://www.ebay.com/" target="_blank">Visita eBay</a>
+  </div>
+
+  <!-- Publicidad OperaGX -->
+  <div id="adGX" class="ad-gx">
+    <span class="close-ad" onclick="document.getElementById('adGX').style.display='none'">✖</span>
+    🎮 ¿Usas muchos recursos navegando?<br>
+    <a href="https://www.opera.com/gx" target="_blank">Descubre Opera GX</a>
+  </div>
+
+  <!-- Selector de Color -->
+  <div class="color-picker">
+    <h3>🎨 Cambiar Tema</h3>
+    <button onclick="setColorTheme('red')">Rojo</button>
+    <button onclick="setColorTheme('blue')">Azul</button>
+    <button onclick="setColorTheme('green')">Verde</button>
+    <button onclick="setColorTheme('yellow')">Amarillo</button>
+  </div>
+
+  <script>
+    const terminal = document.getElementById('terminal');
+    const filtrKey = 'LOLEZZZ3';
+    const hashedAccessKey = '1df3fd5e01cfff6bfae85a740d4b9c44b3c0e9df35dd547b3f053db25ebd2d4b'; // SHA-256('ERROR404')
+
+    let keyValidated = false;
+
+    const sections = {
+      "quienes": `<h2>¿Quiénes Somos?</h2>
+        <p>Somos un colectivo de entusiastas de la ciberseguridad, testers y emprendedores digitales.<br>
+        No rompemos la ley, rompemos las suposiciones.<br>
+        Nuestra misión: compartir conocimiento, crecer habilidades y ganar desde el teclado — éticamente.</p>`,
+
+      "herramientas": `<h2>Herramientas y Proyectos</h2>
+        <ul>
+          <li>🔐 VulnScanner Pro [beta]</li>
+          <li>🧠 OSINT-Collector Toolkit</li>
+          <li>🛠️ Generador de Payloads (para pen-testing legal)</li>
+          <li>📡 Visualizador de Mapas de Red</li>
+        </ul>
+        <p><em>Todas las herramientas son open-source. Úsalas responsablemente.</em></p>`,
+
+      "aprender": `<h2>Aprender y Ganar</h2>
+        <ul>
+          <li>Cómo empezar en Bug Bounty</li>
+          <li>Ingresos pasivos con hacking ético</li>
+          <li>Montar tu propio laboratorio</li>
+          <li>Evitar trampas black hat</li>
+        </ul>
+        <p><em>Nuevas entradas cada semana. Mantente alerta.</em></p>`,
+
+      "unete": `<h2>Únete al Equipo</h2>
+        <p>Discord: <a href="#">[Invitación]</a><br>
+        Telegram: <a href="#">[Unirse al Chat]</a><br>
+        GitHub: <a href="#">ByteSec Org</a></p>
+        <p><em>Solicita acceso a nuestro laboratorio privado.</em></p>`,
+
+      "legal": `<h2>⚠️ Aviso Legal</h2>
+        <p>No apoyamos ni promovemos el hacking ilegal o black hat.<br>
+        Este sitio y comunidad existen para educación, investigación ética y uso responsable de tecnología.</p>
+        <p><em>Respeta la ley. Respeta el conocimiento.</em></p>`,
+
+      "acciones": `<h2>Acciones Hechas</h2>
+        <h3>Ataques</h3>
+        <ul>
+          <li><a onclick="showAttack1()">Ataque a 'Grupo Rc,xxx,Nr,Pd'</a></li>
+          <li><a onclick="showAttack2()">Ataque a servidor de spam oculto</a></li>
+        </ul>`,
+
+      "filtr": `<h2>📁 Open Filtr</h2>
+        <p>Sección desbloqueada con clave secreta.</p>
+        <p>Incluye reportes filtrados, logs privados y herramientas avanzadas.</p>
+        <ul>
+          <li>📄 Log_Intercept_TikTok.txt</li>
+          <li>🛡️ Reporte de abuso IPs detectadas</li>
+          <li>🔍 DeepScan Tool (versión interna)</li>
+        </ul>
+        <p><em>⚠️ Uso exclusivo para miembros verificados.</em></p>`
+    };
+
+    async function validateKey(input, expectedHash) {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(input);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+      return hashHex === expectedHash;
+    }
+
+    async function handleSection(key) {
+      if (key === 'acciones' && !keyValidated) {
+        const userKey = prompt("🔐 Ingresa la clave para Acciones:");
+        const valid = await validateKey(userKey, hashedAccessKey);
+        if (valid) {
+          keyValidated = true;
+          showSection(key);
+        } else {
+          alert("❌ Clave incorrecta.");
+          showMenu();
+        }
+      } else {
+        showSection(key);
+      }
+    }
+
+    function showMenu() {
+      let menuHTML = `<h2>Secciones</h2><ul>`;
+      for (const key in sections) {
+        if (key === "filtr") continue;
+        let displayName = key === 'acciones' ? 'Acciones Hechas' : key.charAt(0).toUpperCase() + key.slice(1);
+        menuHTML += `<li><a onclick="handleSection('${key}')">${displayName}</a></li>`;
+      }
+      menuHTML += `</ul>`;
+      terminal.innerHTML = menuHTML;
+    }
+
+    function showSection(key) {
+      terminal.innerHTML = `<a onclick="showMenu()" style="color:var(--secondary-color);cursor:pointer;">&larr; Volver al menú</a><br><br>${sections[key]}`;
+    }
+
+    function showAttack1() {
+      terminal.innerHTML = `
+        <a onclick="showSection('acciones')" style="color:var(--secondary-color);cursor:pointer;">&larr; Volver a Acciones</a><br><br>
+        <h3>Ataque a "Grupo Rc,xxx,Nr,Pd"</h3>
+        <p>Filtré un grupo donde estaban presentes menores, pero predominaban contenido explícito, gore y elementos perturbadores. Infiltré, bloqueé cuentas clave y expuse sus números. Lo hice para proteger y alertar.</p>`;
+    }
+
+    function showAttack2() {
+      terminal.innerHTML = `
+        <a onclick="showSection('acciones')" style="color:var(--secondary-color);cursor:pointer;">&larr; Volver a Acciones</a><br><br>
+        <h3>Ataque a servidor de spam oculto</h3>
+        <p>Detectamos un servidor disfrazado como foro de ayuda técnica. Tomamos control del panel, reportamos la infraestructura y lo desactivamos. No todo ataque es destrucción. Algunos son limpieza.</p>`;
+    }
+
+    function unlockFiltr() {
+      const inputKey = document.getElementById('filtrKey').value;
+      if (inputKey === filtrKey) {
+        window.location.href = "https://www.roblox.com";
+      } else {
+        alert("❌ Clave incorrecta.");
+      }
+    }
+
+    function setColorTheme(theme) {
+      const root = document.documentElement;
+      const colors = {
+        red:   { primary: '#FF4444', secondary: '#FF6666', light: '#FFCCCC' },
+        blue:  { primary: '#4488FF', secondary: '#66AAFF', light: '#CCDDFF' },
+        green: { primary: '#44FF88', secondary: '#66FFAA', light: '#CCFFDD' },
+        yellow:{ primary: '#FFDD44', secondary: '#FFEE66', light: '#FFF5CC' },
+      };
+      const selected = colors[theme];
+      root.style.setProperty('--primary-color', selected.primary);
+      root.style.setProperty('--secondary-color', selected.secondary);
+      root.style.setProperty('--light-color', selected.light);
+    }
+
+    window.onload = showMenu;
+  </script>
+</body>
+</html>
