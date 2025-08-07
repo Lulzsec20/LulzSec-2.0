@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ByteSec Underground</title>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
-
   <style>
     :root {
       --primary-color: #FF4444;
@@ -19,11 +18,33 @@
 
     body {
       margin: 0;
-      background: url('https://subir-imagen.com/images/2025/07/31/Captura-de-pantalla-2025-07-31-022600.png') no-repeat center center fixed;
+      background: url('https://i.ibb.co/R4k4yXPR/f1212fa4-61b9-44d7-8d7c-bfdefe546342.jpg') no-repeat center center fixed;
       background-size: cover;
       color: var(--primary-color);
       font-family: 'Fira Code', monospace;
       overflow-x: hidden;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--primary-color));
+      box-shadow: 0 0 15px var(--primary-color), 0 0 25px var(--secondary-color);
+      animation: pulseGlow 3s infinite;
+      z-index: 9999;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% {
+        opacity: 0.9;
+      }
+      50% {
+        opacity: 0.4;
+      }
     }
 
     .container {
@@ -60,6 +81,7 @@
       min-height: 250px;
       margin-top: 20px;
       white-space: pre-line;
+      overflow-y: auto;
     }
 
     .ad-banner, .ad-gx {
@@ -157,17 +179,49 @@
     .color-picker button:hover {
       background-color: rgba(255, 255, 255, 0.1);
     }
+
+    /* 🔐 Estilos para los botones Register / Login */
+.auth-buttons {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 10000;
+  display: flex;
+  gap: 10px;
+}
+
+    .auth-buttons button {
+      background-color: rgba(10, 15, 15, 0.85);
+      color: var(--primary-color);
+      border: 1px solid var(--primary-color);
+      border-radius: 4px;
+      padding: 5px 10px;
+      font-family: 'Fira Code', monospace;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .auth-buttons button:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
   </style>
 </head>
-
 <body>
+
+  <!-- Pantalla de inicio tipo Matrix -->
+  <canvas id="matrixCanvas" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:10000;background:black;"></canvas>
+  <div id="introOverlay" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:10001;display:flex;align-items:center;justify-content:center;flex-direction:column;color:#FF4444;font-family:'Fira Code',monospace;background:rgba(0,0,0,0.9);">
+    <h1 style="font-size:2.5rem;">LulZsec 2.0</h1>
+    <p style="font-size:1rem;">Presiona cualquier tecla para ingresar...</p>
+  </div>
+
   <div class="container">
-    <h1>ByteSec Underground</h1>
+    <h1>LulZsec 2.0</h1>
     <p><em>Ethical hacking | Security research | Profit from skills</em></p>
     <div id="terminal" class="terminal"></div>
 
     <div class="key-input-container" id="keyInputSection">
-      <p><strong>🔓 Open Filtr:</strong></p>
+      <p><strong> Open Filtr:</strong></p>
       <input type="password" id="filtrKey" placeholder="Ingresa clave..." />
       <button onclick="unlockFiltr()">Acceder</button>
     </div>
@@ -197,64 +251,73 @@
   </div>
 
   <script>
-    const terminal = document.getElementById('terminal');
-    const filtrKey = 'LOLEZZZ3';
-    const hashedAccessKey = '1df3fd5e01cfff6bfae85a740d4b9c44b3c0e9df35dd547b3f053db25ebd2d4b'; // SHA-256('ERROR404')
+    function showOnly(section) {
+  document.querySelector('.container').style.display = section === 'main' ? 'block' : 'none';
+  document.getElementById('registerSection').style.display = section === 'register' ? 'block' : 'none';
+  document.getElementById('loginSection').style.display = section === 'login' ? 'block' : 'none';
+}
 
+function showRegister() {
+  showOnly('register');
+}
+
+function showLogin() {
+  showOnly('login');
+}
+
+function showMain() {
+  showOnly('main');
+}
+    const terminal = document.getElementById('terminal');
+   const hashedAccessKey = '929f6e7bb459c402f0bce967c56cc0a2909cf05d91f4d7502630e89dce0654f3'; // hash de LOLEZZZ3
     let keyValidated = false;
 
-    const sections = {
-      "quienes": `<h2>¿Quiénes Somos?</h2>
-        <p>Somos un colectivo de entusiastas de la ciberseguridad, testers y emprendedores digitales.<br>
-        No rompemos la ley, rompemos las suposiciones.<br>
-        Nuestra misión: compartir conocimiento, crecer habilidades y ganar desde el teclado — éticamente.</p>`,
-
-      "herramientas": `<h2>Herramientas y Proyectos</h2>
-        <ul>
-          <li>🔐 VulnScanner Pro [beta]</li>
-          <li>🧠 OSINT-Collector Toolkit</li>
-          <li>🛠️ Generador de Payloads (para pen-testing legal)</li>
-          <li>📡 Visualizador de Mapas de Red</li>
-        </ul>
-        <p><em>Todas las herramientas son open-source. Úsalas responsablemente.</em></p>`,
-
-      "aprender": `<h2>Aprender y Ganar</h2>
-        <ul>
-          <li>Cómo empezar en Bug Bounty</li>
-          <li>Ingresos pasivos con hacking ético</li>
-          <li>Montar tu propio laboratorio</li>
-          <li>Evitar trampas black hat</li>
-        </ul>
-        <p><em>Nuevas entradas cada semana. Mantente alerta.</em></p>`,
-
-      "unete": `<h2>Únete al Equipo</h2>
-        <p>Discord: <a href="#">[Invitación]</a><br>
-        Telegram: <a href="#">[Unirse al Chat]</a><br>
-        GitHub: <a href="#">ByteSec Org</a></p>
-        <p><em>Solicita acceso a nuestro laboratorio privado.</em></p>`,
-
-      "legal": `<h2>⚠️ Aviso Legal</h2>
-        <p>No apoyamos ni promovemos el hacking ilegal o black hat.<br>
-        Este sitio y comunidad existen para educación, investigación ética y uso responsable de tecnología.</p>
-        <p><em>Respeta la ley. Respeta el conocimiento.</em></p>`,
-
-      "acciones": `<h2>Acciones Hechas</h2>
-        <h3>Ataques</h3>
-        <ul>
-          <li><a onclick="showAttack1()">Ataque a 'Grupo Rc,xxx,Nr,Pd'</a></li>
-          <li><a onclick="showAttack2()">Ataque a servidor de spam oculto</a></li>
-        </ul>`,
-
-      "filtr": `<h2>📁 Open Filtr</h2>
-        <p>Sección desbloqueada con clave secreta.</p>
-        <p>Incluye reportes filtrados, logs privados y herramientas avanzadas.</p>
-        <ul>
-          <li>📄 Log_Intercept_TikTok.txt</li>
-          <li>🛡️ Reporte de abuso IPs detectadas</li>
-          <li>🔍 DeepScan Tool (versión interna)</li>
-        </ul>
-        <p><em>⚠️ Uso exclusivo para miembros verificados.</em></p>`
-    };
+ const sections = {
+  "quienes": `<h2>¿Quiénes Somos?</h2>
+    <p>Somos un colectivo de entusiastas de la ciberseguridad, testers y emprendedores digitales.<br>
+    No rompemos la ley, rompemos las suposiciones.<br>
+    Nuestra misión: compartir acciones echas por G/OR que buscan estafar,engañar o simplemente no cumplir con lo que prometen, crecer habilidades y ganar desde el teclado — éticamente.</p>`,
+  "herramientas": `<h2>Herramientas y Proyectos</h2>
+    <ul>
+      <li>🔐 VulnScanner Pro [beta]</li>
+      <li>🧠 OSINT-Collector Toolkit</li>
+      <li>🛠️ Generador de Payloads (para pen-testing legal)</li>
+      <li>📡 Visualizador de Mapas de Red</li>
+    </ul>
+    <p><em>Todas las herramientas son open-source. Úsalas responsablemente.</em></p>`,
+  "aprender": `<h2>Aprender</h2>
+    <ul>
+      <li>Cómo empezar en Abuntu,Kali</li>
+      <li>Ingresos pasivos con hacking ético</li>
+      <li>Montar tu propio (contenido eliminado)</li>
+      <li>Evitar doxeo o hackeo a gente inocente</li>
+    </ul>
+    <p><em>Nuevas entradas cada semana. Mantente alerta.</em></p>`,
+  "unete": `<h2>Únete al Equipo</h2>
+    <p>Discord: <a href="#">[Invitación]</a><br>
+    Telegram: <a href="#">[Unirse al Chat]</a><br>
+    GitHub: <a href="#">ByteSec Org</a></p>
+    <p><em>Solicita acceso a nuestro laboratorio privado.</em></p>`,
+  "legal": `<h2> Aviso Legal </h2>
+    <p>No apoyamos ni promovemos el hacking ilegal o black hat.<br>
+    Este sitio y comunidad existen para desenmascarar, investigación,quellos que abusan de el poder</p>
+    <p><em>Respeta la ley. Respeta el conocimiento.</em></p>`,
+  "acciones": `<h2>Acciones Hechas</h2>
+    <h3>Ataques</h3>
+    <ul>
+      <li><a onclick="showAttack1()">(Ningun ataque por el Momento)</a></li>
+      <li><a onclick="showAttack2()">(Ningun ataque por el momento)</a></li>
+    </ul>`,
+  "filtr": `<h2>Carpeta de filtrasiones</h2>
+    <ul>
+      <li>📄 (contenido eliminado)</li>
+      <li>🛡️ Ips rastreadas</li>
+      <li>🔍 Numero,Inf,cuentas</li>
+    </ul>
+    <a href="https://www.youtube.com/watch?v=zL19uMsnpSU&list=RDzL19uMsnpSU&start_radio=1" target="_blank">
+¡More information (Clik)!
+</a>`
+};
 
     async function validateKey(input, expectedHash) {
       const encoder = new TextEncoder();
@@ -265,27 +328,29 @@
       return hashHex === expectedHash;
     }
 
-    async function handleSection(key) {
-      if (key === 'acciones' && !keyValidated) {
-        const userKey = prompt("🔐 Ingresa la clave para Acciones:");
-        const valid = await validateKey(userKey, hashedAccessKey);
-        if (valid) {
-          keyValidated = true;
-          showSection(key);
-        } else {
-          alert("❌ Clave incorrecta.");
-          showMenu();
-        }
-      } else {
-        showSection(key);
-      }
+async function handleSection(key) {
+  if (key === 'acciones' && !keyValidated) {
+    const userKey = prompt("🔐 Ingresa la clave para Acciones:");
+    const valid = userKey === "ERROR404"; // 👈 Aquí haces la validación local
+    if (valid) {
+      keyValidated = true;
+      showSection(key);
+    } else {
+      alert("❌ Clave incorrecta.");
+      showMenu();
     }
+  } else {
+    showSection(key);
+  }
+}
 
     function showMenu() {
       let menuHTML = `<h2>Secciones</h2><ul>`;
       for (const key in sections) {
         if (key === "filtr") continue;
-        let displayName = key === 'acciones' ? 'Acciones Hechas' : key.charAt(0).toUpperCase() + key.slice(1);
+        let displayName = key === 'acciones' ? 'Acciones Hechas' :
+                          key === 'openai' ? 'Open AI' :
+                          key.charAt(0).toUpperCase() + key.slice(1);
         menuHTML += `<li><a onclick="handleSection('${key}')">${displayName}</a></li>`;
       }
       menuHTML += `</ul>`;
@@ -300,24 +365,33 @@
       terminal.innerHTML = `
         <a onclick="showSection('acciones')" style="color:var(--secondary-color);cursor:pointer;">&larr; Volver a Acciones</a><br><br>
         <h3>Ataque a "Grupo Rc,xxx,Nr,Pd"</h3>
-        <p>Filtré un grupo donde estaban presentes menores, pero predominaban contenido explícito, gore y elementos perturbadores. Infiltré, bloqueé cuentas clave y expuse sus números. Lo hice para proteger y alertar.</p>`;
+        <p>Nada</p>`;
     }
 
     function showAttack2() {
       terminal.innerHTML = `
         <a onclick="showSection('acciones')" style="color:var(--secondary-color);cursor:pointer;">&larr; Volver a Acciones</a><br><br>
         <h3>Ataque a servidor de spam oculto</h3>
-        <p>Detectamos un servidor disfrazado como foro de ayuda técnica. Tomamos control del panel, reportamos la infraestructura y lo desactivamos. No todo ataque es destrucción. Algunos son limpieza.</p>`;
+        <p>Nada</p>`;
     }
 
-    function unlockFiltr() {
-      const inputKey = document.getElementById('filtrKey').value;
-      if (inputKey === filtrKey) {
-        window.location.href = "https://www.roblox.com";
-      } else {
-        alert("❌ Clave incorrecta.");
-      }
+function unlockFiltr() {
+  const inputKey = document.getElementById('filtrKey').value.trim();
+  validateKey(inputKey, hashedAccessKey).then(valid => {
+    if (valid) {
+      showSection('filtr');
+    } else {
+      alert("❌ Clave incorrecta.");
     }
+  });
+}
+
+// 👉 Esto permite presionar Enter en el input
+document.getElementById('filtrKey').addEventListener('keydown', function (e) {
+  if (e.key === 'Enter') {
+    unlockFiltr();
+  }
+});
 
     function setColorTheme(theme) {
       const root = document.documentElement;
@@ -333,7 +407,109 @@
       root.style.setProperty('--light-color', selected.light);
     }
 
+    const simpleResponses = {
+      "hola": "¡Hola! ¿En qué puedo ayudarte?",
+      "buenas": "¡Buenas! ¿Qué necesitas?",
+      "hey": "Hey 👋",
+      "holi": "¡Holi! 😄",
+      "hello": "Hi there!",
+      "qué es esto": "Es LulZsec, un sitio para ciberseguridad ética.",
+      "quién eres": "Soy una interfaz de ByteSec. ¿Buscas conocimiento o acción?",
+      "como estas": "¡Funcionando al 100%! ¿Y tú?",
+      "help": "Puedes explorar el menú o escribir cosas simples para conversar.",
+      "gracias": "¡De nada!",
+    };
+
+document.addEventListener("keydown", (e) => {
+  // Si estás en un campo input (como el de la clave), no hacer nada aquí
+  if (document.activeElement.tagName === 'INPUT') return;
+
+  if (e.key === "Enter") {
+    // Aquí puedes decidir qué hacer: por ahora simplemente no hacer nada o mostrar el menú
+    showMenu(); // opcional, o elimínalo si no quieres hacer nada
+  }
+});
+
     window.onload = showMenu;
+
+    // Efecto Matrix Rojo (versión mejorada)
+    const canvas = document.getElementById('matrixCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // Ajustar canvas a pantalla completa
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const fontSize = 16;
+    const columns = Math.floor(canvas.width / fontSize);
+    const drops = new Array(columns).fill(0);
+
+function drawMatrix() {
+  // Rastro más visible y duradero
+  ctx.fillStyle = "rgba(0, 0, 0, 0.03)";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Colores rojos brillantes solamente (sin blanco)
+  const colors = ["#FF2222", "#FF4444", "#FF5555", "#FF6666"];
+  ctx.font = fontSize + "px Fira Code";
+
+  // Brillo fuerte para cada carácter
+  ctx.shadowColor = "#FF4444";
+  ctx.shadowBlur = 15;
+
+  for (let i = 0; i < columns; i++) {
+    const text = String.fromCharCode(33 + Math.floor(Math.random() * 94));
+    ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)];
+    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+    // Reinicio aleatorio de la columna
+    if (drops[i] * fontSize > canvas.height && Math.random() > 0.95) {
+      drops[i] = 0;
+    }
+    drops[i]++;
+  }
+}
+
+    let matrixInterval = setInterval(drawMatrix, 50);
+
+    function hideIntro() {
+      document.getElementById('matrixCanvas').style.display = 'none';
+      document.getElementById('introOverlay').style.display = 'none';
+      clearInterval(matrixInterval);
+    }
+
+    window.addEventListener('keydown', hideIntro);
+    window.addEventListener('click', hideIntro);
+    setTimeout(hideIntro, 8000);
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
   </script>
+
+  <!-- Botones Register / Login -->
+<div class="auth-buttons">
+  <button onclick="showRegister()">Register</button>
+  <button onclick="showLogin()">Login</button>
+</div>
+<!-- Sección de Registro -->
+<div id="registerSection" style="display:none;" class="container">
+  <h2>Registro</h2>
+  <input type="text" placeholder="Usuario" /><br><br>
+  <input type="password" placeholder="Contraseña" /><br><br>
+  <button>Crear cuenta</button><br><br>
+  <a onclick="showMain()" style="cursor:pointer;">⏪ Volver al inicio</a>
+</div>
+
+<!-- Sección de Login -->
+<div id="loginSection" style="display:none;" class="container">
+  <h2>Iniciar Sesión</h2>
+  <input type="text" placeholder="Usuario" /><br><br>
+  <input type="password" placeholder="Contraseña" /><br><br>
+  <button>Entrar</button><br><br>
+  <a onclick="showMain()" style="cursor:pointer;">⏪ Volver al inicio</a>
+</div>
+
 </body>
 </html>
